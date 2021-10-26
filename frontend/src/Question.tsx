@@ -6,11 +6,11 @@ interface Props {
   showContent?: boolean;
 }
 
-export const Question = ({ data, showContent }: Props) => (
-    <div>
+export const Question = ({ data, showContent = true }: Props) => (
+  <div>
     <div>{data.title}</div>
     {showContent && (
-        <div>
+      <div>
         {data.content.length > 50
           ? `${data.content.substring(0, 50)}...`
           : data.content}
@@ -18,12 +18,8 @@ export const Question = ({ data, showContent }: Props) => (
     )}
     <div>
       {`Asked by ${
-          data.userName
-        } on ${data.created.toLocaleDateString()} ${data.created.toLocaleTimeString()}`}
+        data.userName
+      } on ${data.created.toLocaleDateString()} ${data.created.toLocaleTimeString()}`}
     </div>
   </div>
 );
-
-Question.defaultProps = {
-  showContent: true,
-};
