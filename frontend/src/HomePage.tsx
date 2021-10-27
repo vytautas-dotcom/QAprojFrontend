@@ -1,12 +1,20 @@
 import React from "react";
 import { QuestionList } from "./QuestionList";
-import { getUnansweredQuestions } from "./QuestionData";
+import { getUnansweredQuestions, QuestionData } from "./QuestionData";
 import { Page } from "./Page";
 import { PageTitle } from "./PageTitle";
 
 export const HomePage = () => {
+  const [questions, setQuestions] = React.useState<QuestionData[]>([]);
+  const [questionsLoading, setQuestionsLoading] = React.useState(true);
+
   React.useEffect(() => {
-    console.log("first rendered");
+    const doGetUnansweredQuestions = async () => {
+      const unansweredQuestions = await getUnansweredQuestions();
+      setQuestions(unansweredQuestions);
+      setQuestionsLoading(false);
+    };
+    doGetUnansweredQuestions();
   }, []);
 
   return (
@@ -15,7 +23,11 @@ export const HomePage = () => {
         <PageTitle>Unanswered Questions</PageTitle>
         <button>Ask a question</button>
       </div>
-      {/* <QuestionList data={getUnansweredQuestions()} /> */}
+      {questionsLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <QuestionList data={questions} />
+      )}
     </Page>
   );
 };
