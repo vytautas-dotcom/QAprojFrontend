@@ -7,15 +7,19 @@ import { UserIcon } from "./Icons";
 import { Link, useSearchParams } from "react-router-dom";
 import React from "react";
 
+import { useForm } from "react-hook-form";
+
+type FormData = {
+  search: string;
+};
+
 export const Header = () => {
+  const { register, handleSubmit } = useForm<FormData>();
+
   const [searchParams] = useSearchParams();
   const criteria = searchParams.get("criteria") || "";
-  const [search, setSearch] = React.useState(criteria);
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.currentTarget.value);
-  };
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+
+  const submitForm = ({ search }: FormData) => {
     console.log(search);
   };
 
@@ -46,12 +50,12 @@ export const Header = () => {
       >
         Q and A
       </Link>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(submitForm)}>
         <input
+          {...register("search")}
           type="text"
           placeholder="Search..."
-          value={search}
-          onChange={handleSearchInputChange}
+          defaultValue={criteria}
           css={css`
             box-sizing: border-box;
             font-family: ${fontFamily};
