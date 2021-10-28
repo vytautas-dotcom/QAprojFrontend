@@ -4,7 +4,7 @@ import { fontFamily, fontSize, gray1, gray2, gray5 } from "./Styles";
 
 import { UserIcon } from "./Icons";
 
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import React from "react";
 
 import { useForm } from "react-hook-form";
@@ -15,12 +15,13 @@ type FormData = {
 
 export const Header = () => {
   const { register, handleSubmit } = useForm<FormData>();
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const criteria = searchParams.get("criteria") || "";
 
   const submitForm = ({ search }: FormData) => {
-    console.log(search);
+    navigate(`search?criteria=${search}`);
   };
 
   return (
