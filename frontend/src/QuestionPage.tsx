@@ -9,6 +9,7 @@ import {
   FieldTextArea,
   FormButtonContainer,
   PrimaryButton,
+  FieldError,
 } from "./Styles";
 import { useForm } from "react-hook-form";
 
@@ -26,7 +27,10 @@ type FormData = {
 };
 
 export const QuestionPage = () => {
-  const { register } = useForm<FormData>();
+  const {
+    register,
+    formState: { errors },
+  } = useForm<FormData>({ mode: "onBlur" });
 
   const [question, setQuestion] = React.useState<QuestionData | null>(null);
   const { questionId } = useParams();
@@ -88,7 +92,18 @@ export const QuestionPage = () => {
               <Fieldset>
                 <FieldContainer>
                   <FieldLabel htmlFor="content">Your Answer</FieldLabel>
-                  <FieldTextArea id="content" {...register}/>
+                  <FieldTextArea
+                    id="content"
+                    {...register("content", { required: true, minLength: 50 })}
+                  />
+                  {errors.content && errors.content.type === "required" && (
+                    <FieldError>You must enter the answer</FieldError>
+                  )}
+                  {errors.content && errors.content.type === "minLength" && (
+                    <FieldError>
+                      The answer must be at least 50 characters
+                    </FieldError>
+                  )}
                 </FieldContainer>
                 <FormButtonContainer>
                   <PrimaryButton type="submit">
