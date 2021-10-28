@@ -119,6 +119,7 @@ const questionsReducer = (
       };
     }
   }
+  return state; //this is important for first loading
 };
 
 const rootReducer = combineReducers<AppState>({
